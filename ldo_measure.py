@@ -6,20 +6,36 @@ import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import pyvisa
+from keithley_2460 import Keithley2460
+from agilent_34970a import Agilent34970A
 
 class LDOmeasure:
     def __init__(self, config_file):
-        print("Python --> Welcome to the DUNE FD2 LDO Measurement Script")
+        print("Main --> Welcome to the DUNE FD2 LDO Measurement Script")
         with open(config_file, "r") as jsonfile:
             self.json_data = json.load(jsonfile)
-
-        print(self.json_data["example1"])
+        self.rm = pyvisa.ResourceManager()
 
     def initialize_keithley_2460(self):
-        print("Python --> Initializing Keithley 2460")
+        print("Main --> Initializing Keithley 2460")
+        self.keithley = Keithley2460(self.rm, self.json_data)
+        self.keithley.initialize()
+        
+    def initialize_agilent_34970(self):
+        print("Main --> Initializing Agilent 34970A")
+        self.agilent = Agilent34970A(self.rm, self.json_data)
+        self.agilent.initialize()
+        
+    def measure_keithley_2460(self):
+        v,c = self.keithley.measure()
+        print(v)
+        print(c)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        sys.exit(f"Error: You need to supply a config file for this test as the argument! You had {len(sys.argv)-1} arguments!")
+        sys.exit(f"Main Error: You need to supply a config file for this test as the argument! You had {len(sys.argv)-1} arguments!")
     x = LDOmeasure(sys.argv[1])
-    x.initialize_keithley_2460()
+    #x.initialize_keithley_2460()
+    #x.measure_keithley_2460()
+    
+    x.initialize_agilent_34970()

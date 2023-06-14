@@ -1,3 +1,16 @@
-{"example1": "tst",
-"example2": "tst2"
+{"keithley": "USB0::0x05E6::0x2460::04600037::INSTR",
+"keithley_voltage": "8",
+"keithley_password": "dont touch",
+"keithley_voltage_NPLcycles": "10",
+"keithley_current_NPLcycles": "10",
+"keithley_autozero": "ON",
+"keithley_voltage_autorange": "ON",
+"keithley_voltage_autorange_rebound": "ON",
+"keithley_current_autorange": "ON",
+"keithley_4wire_measurement": "OFF",
+"keithley_ascii_digits": "7",
+"keithley_front_panel1": "TEST IN PROGRESS",
+"keithley_front_panel2": "Do not touch!",
+
+"agilent": "GPIB1::9::INSTR"
 }
