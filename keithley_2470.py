@@ -5,23 +5,23 @@ Created on Wed Jun 14 10:51:58 2023
 @author: Eraguzin
 """
 
-class Keithley2460:
+class Keithley2470:
     def __init__(self, rm, json_data):
         self.rm = rm
         self.json_data = json_data
-        self.keithley = self.rm.open_resource(self.json_data['keithley2460'])
-        print(f"Keithley 2460 --> Connected to {self.keithley.query('*IDN?', delay=5)}")
+        self.keithley = self.rm.open_resource(self.json_data['keithley2470'])
+        print(f"Keithley 2470 --> Connected to {self.keithley.query('*IDN?', delay=5)}")
         self.keithley.write("*RST")
         
     def initialize(self):
-        self.voltage = self.json_data['keithley2460_voltage']
+        self.voltage = self.json_data['keithley2470_voltage']
         
         #Set the instrument to source voltage as opposed to current
         self.keithley.write(":SOURce1:FUNCtion:MODE VOLTage")
         
         #Write the actual desired voltage
         self.keithley.write(f":SOURce1:VOLT:LEVel:IMMediate:AMPLitude {self.voltage}")
-        print(f"Keithley 2460 --> Wrote voltage to {self.voltage}")
+        print(f"Keithley 2470 --> Wrote voltage to {self.voltage}")
         
         #Turn on autorange
         self.keithley.write(":SOURce1:CURRent:RANGe:AUTO ON")
@@ -34,24 +34,25 @@ class Keithley2460:
         
         #Set measurement time for best accuracy
         self.line_freq = self.keithley.query(":SYSTem:LFRequency?")
-        self.keithley.write(f":SENSe1:VOLTage:NPLCycles {self.json_data['keithley2460_voltage_NPLcycles']}")
-        self.keithley.write(f":SENSe1:CURRent:NPLCycles {self.json_data['keithley2460_current_NPLcycles']}")
+        self.keithley.write(f":SENSe1:VOLTage:NPLCycles {self.json_data['keithley2470_voltage_NPLcycles']}")
+        self.keithley.write(f":SENSe1:CURRent:NPLCycles {self.json_data['keithley2470_current_NPLcycles']}")
         #Set Autozero on
-        self.keithley.write(f":SENSe1:VOLTage:AZERo {self.json_data['keithley2460_autozero']}")
+        self.keithley.write(f":SENSe1:VOLTage:AZERo {self.json_data['keithley2470_autozero']}")
         
         #2 wire sensing
-        self.keithley.write(f":SENSe1:VOLTage:RSENse {self.json_data['keithley2460_4wire_measurement']}")
+        self.keithley.write(f":SENSe1:VOLTage:RSENse {self.json_data['keithley2470_4wire_measurement']}")
         
         #Voltage source setting can't be limited by measurement limits
-        self.keithley.write(f":SENSe1:VOLTage:RANGe:AUTO {self.json_data['keithley2460_voltage_autorange']}")
-        self.keithley.write(f":SENSe1:VOLTage:RANGe:AUTO:REBound {self.json_data['keithley2460_voltage_autorange_rebound']}")
+        self.keithley.write(f":SENSe1:VOLTage:RANGe:AUTO {self.json_data['keithley2470_voltage_autorange']}")
+        #Something wrong with this function in the 2470
+        #self.keithley.write(f":SENSe1:VOLTage:RANGe:AUTO:REBound {self.json_data['keithley2470_voltage_autorange_rebound']}")
         
         #Current measurements are auto
-        self.keithley.write(f":SENSe1:CURRent:RANGe:AUTO {self.json_data['keithley2460_current_autorange']}")
+        self.keithley.write(f":SENSe1:CURRent:RANGe:AUTO {self.json_data['keithley2470_current_autorange']}")
         
         #Should we have a voltage limit or current limit? On Source or Measurement side?
         #Number of digits in ASCII response
-        self.keithley.write(f":FORMat:ASCii:PRECision {self.json_data['keithley2460_ascii_digits']}")
+        self.keithley.write(f":FORMat:ASCii:PRECision {self.json_data['keithley2470_ascii_digits']}")
         
         #When off, be in the normal state
         self.keithley.write(":OUTPut1:VOLTage:SMODe NORM")
@@ -59,8 +60,8 @@ class Keithley2460:
         
         #Display on front screen
         self.keithley.write(":DISPlay:CLEar")
-        self.keithley.write(f":DISPlay:USER1:TEXT:DATA '{self.json_data['keithley2460_front_panel1']}'")
-        self.keithley.write(f":DISPlay:USER2:TEXT:DATA '{self.json_data['keithley2460_front_panel2']}'")
+        self.keithley.write(f":DISPlay:USER1:TEXT:DATA '{self.json_data['keithley2470_front_panel1']}'")
+        self.keithley.write(f":DISPlay:USER2:TEXT:DATA '{self.json_data['keithley2470_front_panel2']}'")
         self.keithley.write(":DISPlay:SCReen SWIPE_USER")
         
     def measure(self):
