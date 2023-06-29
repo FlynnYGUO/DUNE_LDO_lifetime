@@ -39,8 +39,9 @@ class Keithley2460:
         #Set Autozero on
         self.keithley.write(f":SENSe1:VOLTage:AZERo {self.json_data['keithley2460_autozero']}")
         
-        #2 wire sensing
-        self.keithley.write(f":SENSe1:VOLTage:RSENse {self.json_data['keithley2460_4wire_measurement']}")
+        #2 or 4 wire sensing
+        self.keithley.write(f":SENSe1:CURRent:RSENse {self.json_data['keithley2470_4wire_measurement']}")
+        self.keithley.write(f":SENSe1:VOLTage:RSENse {self.json_data['keithley2470_4wire_measurement']}")
         
         #Voltage source setting can't be limited by measurement limits
         self.keithley.write(f":SENSe1:VOLTage:RANGe:AUTO {self.json_data['keithley2460_voltage_autorange']}")
