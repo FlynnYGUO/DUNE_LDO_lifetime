@@ -49,6 +49,13 @@ class LDOmeasure:
         voltages = self.agilent.measure()
         print(voltages)
 
+    def stress_keithley_2470(self):
+        print("Main --> Set Keithley 2470 for stress test")
+        self.keithley2470.stress()
+
+    def unstress_keithley_2470(self):
+        print("Main --> Set Keithley 2470 for unstress test")
+        self.keithley2470.unstress()
 
     def begin_measurement(self):
         header_array = ["Time"]
@@ -70,20 +77,50 @@ class LDOmeasure:
         print("Main --> Instruments Initialized")
 
         curr_file = os.path.dirname(os.path.abspath(__file__))
-        output_path = os.path.join(curr_file, "../DATA/" + self.name, self.name + ".csv")
+        # New dir automatically created to save data and plots
+        data_path = os.path.join(curr_file, "..\\DATA\\" + self.name, "")
+        if not os.path.exists(data_path):
+            os.makedirs(data_path)
+        output_path = os.path.join(data_path, self.name + ".csv")
 
         self.seconds = int(self.json_data['measurement_period'])
         time = datetime.now()
         next_time = time
+        tot_stress_time = int(self.json_data['stress_test_period'])
+        tot_unstress_time = int(self.json_data['unstress_test_period'])
+        stress_cycle = 0
+        unstress_cycle = 0
+        isstress = False
 
         with open(output_path, 'a', newline='') as csvfile:
             spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
             spamwriter.writerow(header_array)
 
         print("Main --> Test beginning. Press Ctrl+C on the keyboard to end")
+        # Ctrl+C is the only way to stop this while loop measurement
         while True:
             try:
                 time = datetime.now()
+                # Start stress test if an unstress test period is over
+                if ( int(self.json_data['stress_test_period']) > 0 && tot_unstress_time >= int(self.json_data['unstress_test_period']) ):
+                    if (int(self.json_data['test_lp'])):  self.stress_keithley_2470()
+                    if (int(self.json_data['test_adm'])): self.stress_keithley_2460()
+                    # reset counter
+                    tot_stress_time = 0
+                    tot_unstress_time = 0
+                    stress_cycle = stress_cycle + 1
+                    isstress = True
+
+                # Start unstress test if a stress test period is over
+                if ( int(self.json_data['unstress_test_period']) > 0 && tot_stress_time >= int(self.json_data['stress_test_period']) ):
+                    if (int(self.json_data['test_lp'])):  self.unstress_keithley_2470()
+                    if (int(self.json_data['test_adm'])): self.unstress_keithley_2460()
+                    # reset counter
+                    tot_unstress_time = 0
+                    tot_stress_time = 0
+                    unstress_cycle = unstress_cycle + 1
+                    isstress = False
+
                 if (time > next_time):
                     if (int(self.json_data['test_adm'])):
                         k2460_v,k2460_c = self.keithley2460.measure()
@@ -93,6 +130,7 @@ class LDOmeasure:
                         print(f"Keithley 2470 voltage is {k2470_v}, Keithley current is {k2470_c}")
                     voltages = self.agilent.measure()
                     print(f"Agilent voltages are {voltages}")
+                    print("Tot stress cycles: ", stress_cycle, ", unstress cycles: ", unstress_cycle, ", current cycle is stress: ", isstress)
                     with open(output_path, 'a', newline='') as csvfile:
                         spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
                         data_row = []
@@ -103,6 +141,9 @@ class LDOmeasure:
 
                     next_time = time + timedelta(seconds=self.seconds)
                     self.analyze_data(output_path)
+
+                if (isstress): tot_stress_time = tot_stress_time + (datetime.now() - time).total_seconds()
+                else: tot_unstress_time = tot_unstress_time + (datetime.now() - time).total_seconds()
             except KeyboardInterrupt:
                 print("Keyboard interrupt to finish test")
                 break
