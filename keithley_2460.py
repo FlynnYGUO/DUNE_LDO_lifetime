@@ -71,6 +71,20 @@ class Keithley2460:
         self.keithley.query(":MEASure:VOLTage?")
         self.keithley.query(":MEASure:CURRent?", delay=5)
 
+    # Always stress after above initialization is done to keep all other settings unchanged
+    def stress(self):
+        self.stressvoltage = self.json_data['keithley2460_stress_voltage']
+
+        #Write the actual desired voltage
+        self.keithley.write(f":SOURce1:VOLT:LEVel:IMMediate:AMPLitude {self.stressvoltage}")
+        print(f"Keithley 2460 --> Wrote stress voltage to {self.stressvoltage}")
+
+    def unstress(self):
+        self.voltage = self.json_data['keithley2460_voltage']
+
+        self.keithley.write(f":SOURce1:VOLT:LEVel:IMMediate:AMPLitude {self.voltage}")
+        print(f"Keithley 2460 --> Wrote unstress voltage to {self.voltage}")
+
     def measure(self):
         #Make measurements, results come in like '7.999993E+00\n'
         #Remove newline at end

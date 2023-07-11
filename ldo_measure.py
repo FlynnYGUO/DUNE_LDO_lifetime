@@ -53,9 +53,17 @@ class LDOmeasure:
         print("Main --> Set Keithley 2470 for stress test")
         self.keithley2470.stress()
 
+    def stress_keithley_2460(self):
+        print("Main --> Set Keithley 2460 for stress test")
+        self.keithley2460.stress()
+
     def unstress_keithley_2470(self):
         print("Main --> Set Keithley 2470 for unstress test")
         self.keithley2470.unstress()
+
+    def unstress_keithley_2460(self):
+        print("Main --> Set Keithley 2460 for unstress test")
+        self.keithley2460.unstress()
 
     def begin_measurement(self):
         header_array = ["Time"]
