@@ -1,6 +1,6 @@
 {"keithley2470": "USB0::0x05E6::0x2470::04441975::INSTR",
 "keithley2470_voltage": "7",
-"keithley2470_stress_voltage": "15",
+"keithley2470_stress_voltage": "8",
 "keithley2470_ilimit": "1.0",
 "keithley2470_password": "dont touch",
 "keithley2470_voltage_NPLcycles": "10",
@@ -16,7 +16,7 @@
 
 "keithley2460": "USB0::0x05E6::0x2460::04600037::INSTR",
 "keithley2460_voltage": "7",
-"keithley2460_stress_voltage": "30",
+"keithley2460_stress_voltage": "9",
 "keithley2460_ilimit": "1.0",
 "keithley2460_password": "dont touch",
 "keithley2460_voltage_NPLcycles": "10",

@@ -110,7 +110,7 @@ class LDOmeasure:
             try:
                 time = datetime.now()
                 # Start stress test if an unstress test period is over
-                if ( int(self.json_data['stress_test_period']) > 0 && tot_unstress_time >= int(self.json_data['unstress_test_period']) ):
+                if ( int(self.json_data['stress_test_period']) > 0 and tot_unstress_time >= int(self.json_data['unstress_test_period']) ):
                     if (int(self.json_data['test_lp'])):  self.stress_keithley_2470()
                     if (int(self.json_data['test_adm'])): self.stress_keithley_2460()
                     # reset counter
@@ -120,7 +120,7 @@ class LDOmeasure:
                     isstress = True
 
                 # Start unstress test if a stress test period is over
-                if ( int(self.json_data['unstress_test_period']) > 0 && tot_stress_time >= int(self.json_data['stress_test_period']) ):
+                if ( int(self.json_data['unstress_test_period']) > 0 and tot_stress_time >= int(self.json_data['stress_test_period']) ):
                     if (int(self.json_data['test_lp'])):  self.unstress_keithley_2470()
                     if (int(self.json_data['test_adm'])): self.unstress_keithley_2460()
                     # reset counter
@@ -158,6 +158,7 @@ class LDOmeasure:
 
     def analyze_data(self, output_path):
         df = pd.read_csv(output_path)
+        plotpath = os.path.dirname(os.path.abspath(output_path))
         #saved_column = df.column_name #you can also use df['column_name']
         name_list = []
         data_list = []
@@ -171,9 +172,9 @@ class LDOmeasure:
                 data_list.append([float(i) for i in columnData])
 
         for num,i in enumerate(name_list):
-            self.plot(time_column, i, data_list[num])
+            self.plot(time_column, i, data_list[num], plotpath)
 
-    def plot(self, time, name, data):
+    def plot(self, time, name, data, path):
         fig = plt.figure(figsize=(16, 12), dpi=80)
         ax = fig.add_subplot(1,1,1)
         ax.tick_params(axis='x', colors='black',labelsize='medium')
@@ -183,7 +184,7 @@ class LDOmeasure:
         ax.set_xlabel("Time (Hours:Minutes)", fontsize = 24)
         ax.set_ylabel("Value", fontsize = 24)
         ax.plot(time, data)
-        fig.savefig(f'plot_{name}.png')
+        fig.savefig(os.path.join(path, f'plot_{name}.png'))
         plt.close(fig)
 
 if __name__ == "__main__":
