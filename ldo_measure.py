@@ -109,15 +109,6 @@ class LDOmeasure:
         while True:
             try:
                 time = datetime.now()
-                # Start stress test if an unstress test period is over
-                if ( int(self.json_data['stress_test_period']) > 0 and tot_unstress_time >= int(self.json_data['unstress_test_period']) ):
-                    if (int(self.json_data['test_lp'])):  self.stress_keithley_2470()
-                    if (int(self.json_data['test_adm'])): self.stress_keithley_2460()
-                    # reset counter
-                    tot_stress_time = 0
-                    tot_unstress_time = 0
-                    stress_cycle = stress_cycle + 1
-                    isstress = True
 
                 # Start unstress test if a stress test period is over
                 if ( int(self.json_data['unstress_test_period']) > 0 and tot_stress_time >= int(self.json_data['stress_test_period']) ):
@@ -128,6 +119,16 @@ class LDOmeasure:
                     tot_stress_time = 0
                     unstress_cycle = unstress_cycle + 1
                     isstress = False
+
+                # Start stress test if an unstress test period is over
+                if ( int(self.json_data['stress_test_period']) > 0 and tot_unstress_time >= int(self.json_data['unstress_test_period']) ):
+                    if (int(self.json_data['test_lp'])):  self.stress_keithley_2470()
+                    if (int(self.json_data['test_adm'])): self.stress_keithley_2460()
+                    # reset counter
+                    tot_stress_time = 0
+                    tot_unstress_time = 0
+                    stress_cycle = stress_cycle + 1
+                    isstress = True
 
                 if (time > next_time):
                     if (int(self.json_data['test_adm'])):
