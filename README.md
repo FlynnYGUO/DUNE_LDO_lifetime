@@ -8,3 +8,6 @@
 ## Introductions to LP/ADM
 1. [LP](https://www.ti.com/lit/ds/symlink/lp3964.pdf?ts=1688670238333&ref_url=https%253A%252F%252Fwww.google.com%252F)
 2. [ADM](https://www.analog.com/media/en/technical-documentation/data-sheets/ADM7151.pdf)
+## Run scripts
+```python .\ldo_measure.py .\config.json```
+> Remember to change the stress voltage in config.json, 2470->LP, 2460->ADM
