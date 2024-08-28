@@ -10,6 +10,11 @@
 
 
 #include <TSystem.h> // For gSystem
+#include <TFile.h>
+#include <TH1F.h>
+#include <TCanvas.h>
+#include <TLegend.h>
+#include <TColor.h>
 
 using namespace std;
 
@@ -91,7 +96,7 @@ void DataAnalysis_ave(string fileName, string date, int batchNumber, float LP_No
     // Discard abNominal data
     if( K2460_V.at(i) < 6 )
     {
-      cout << "abNominal voltage which is smaller than 6V" << endl;
+      cout << "Abnormal voltage which is smaller than 6V" << endl;
       continue;
     }
     // Stress
@@ -216,8 +221,8 @@ void DataAnalysis_ave(string fileName, string date, int batchNumber, float LP_No
   double A_K2470_ave_s_ini = K2470_ave_s.at(0), A_K2470_ave_s_min = K2470_ave_s.at(0), A_K2470_ave_s_max = K2470_ave_s.at(0);
   double A_K2470_ave_n_ini = K2470_ave_n.at(0), A_K2470_ave_n_min = K2470_ave_n.at(0), A_K2470_ave_n_max = K2470_ave_n.at(0);
 
-  size_s = 67; // zoom in the first 2000 min of Stress test 67=2000/30
-  size_n = 136; //zoom in the first 500 min of Nominal test 100=500/5
+  // size_s = 67; // zoom in the first 2000 min of Stress test 67=2000/30
+  // size_n = 100; //zoom in the first 500 min of Nominal test 100=500/5
 
   // Stress
   for (int i = 0; i < size_s; i++)

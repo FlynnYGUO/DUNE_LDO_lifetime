@@ -21,8 +21,10 @@ void plot_1overV() {
     // // double y[] = {28.52203092, 26.88441412, 21.93553931, 10.46476363, 21.93212996, 29.29462041}; // Log10(Lifetime) values in hours
     // double y[] = {1.188417955, 1.120183922, 0.9139808048, 0.4360318177, 0.9138387483, 1.220609184};
 
-    double x[] = {1./9, 1./9.5, 1./10, 1./10.5};
-    double y[] = {1.674923836, 1.385305189, 1.02056528, 1.146807424};
+    // double x[] = {1./9, 1./9.5, 1./10, 1./10.5, 1./10.3};
+    // double y[] = {1.754652931, 1.442340511, 1.140188854, 1.403934343, 1.08199394};
+    double x[] = {1./9, 1./9.5, 1./10, 1./10.3};
+    double y[] = {1.754652931, 1.442340511, 1.140188854, 1.08199394};
     int n_points = 4; // Number of data points
     TGraph *gr = new TGraph(n_points, x, y);
 
@@ -49,5 +51,5 @@ void plot_1overV() {
     leg->Draw();
 
     // Save the canvas
-    c->SaveAs("/Users/flynnguo/Documents/SBU/NN/DUNE/FD_PDS/LDO_Lifetime/Plots/Apr19/LP_Accelerated_Lifetime_Measurement.png");
+    c->SaveAs("/Users/flynnguo/Documents/SBU/NN/DUNE/FD_PDS/LDO_Lifetime/Plots/24May9/LP_Accelerated_Lifetime_Measurement_wo10p5.png");
 }
